@@ -1,0 +1,12 @@
+def copyFormat(runA, runB):
+	fontB = runB.font
+	fontA = runA.font
+	fontB.bold = fontA.bold
+	fontB.italic = fontA.italic
+	fontB.underline = fontA.underline
+	fontB.strike = fontA.strike
+	fontB.subscript = fontA.subscript
+	fontB.superscript = fontA.superscript
+	fontB.size = fontA.size
+	fontB.highlight_color = fontA.highlight_color
+	fontB.color.rgb = fontA.color.rgb
