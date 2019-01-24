@@ -1,4 +1,14 @@
 # coding=utf-8
+
+# verifica se siamo in produzione o in sviluppo
+import sys
+def checkProduction():
+    if getattr(sys, 'frozen', False):
+        return False
+    else:
+        return True
+
+
 # funzione che riceve come parametro una stringa e rimuove l'estensione ".pdf" #
 def filterString(str):
     return str.split('.pdf')[0]

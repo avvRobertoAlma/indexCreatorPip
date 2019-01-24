@@ -3,18 +3,25 @@
 # "path" serve per gestire i percorsi #
 # "listdir" serve per elencare i file contenuti in una cartella #
 from os import path, listdir
+import sys
 
 # importo la libreria docx-python
 import docx
 
 # importo le funzioni contenute nel file helpers.py
-from helpers import filterString, Doc, Link, createLinkArray
+from helpers import filterString, Doc, Link, createLinkArray, checkProduction
 
 # importo la funzione hyperlink
 import hyperlink
 
+# verifica sviluppo o produzione
+dev_mode = checkProduction()
+
 # salvo il percorso relativo alla directory nella quale viene eseguito lo script #
-pathDir = path.dirname(path.abspath(__file__))
+if dev_mode:
+        pathDir = path.dirname(path.abspath(__file__))
+else:
+        pathDir = path.dirname(sys.executable)
 
 print('Benvenuti in linkGenerator versione 1.0.0\n Il programma è realizzato dall\' Avv. Roberto Alma\n, con il supporto dell\' Avv. Matteo Moscioni, dell\'Avv. Francesco Saverio Orlando e dell\' Avv. Antonio Cocco')
 
@@ -47,8 +54,12 @@ linksArray = createLinkArray(documents)
 #creazione dell'indice dei documenti
 print('Inizio creazione dell\'indice dei documenti')
 
-indice = docx.Document()
-indice.add_heading('Indice atti e documenti')
+if dev_mode:
+        indice = docx.Document()
+else:
+        indice = docx.Document(path.join(pathDir, 'template.docx'))
+        indice.add_heading('Indice atti e documenti')
+
 
 # ciclo che per ogni link salvato aggiunge un elemento all'indice e aggiunge il link ipertestuale
 for link in linksArray:
@@ -61,7 +72,8 @@ for link in linksArray:
             print('Error: '+ link.name)
     
 
-indice.save('00_indice_atti_documenti.docx')
+indice.save(path.join(pathDir,'00_indice_atti_documenti.docx'))
+
 
 
 # informo l'utente che inizio a scansionare l'atto
@@ -78,7 +90,7 @@ for p in atto.paragraphs:
 # informo che la scansione è completata
 print('Scansione completata\n Salvataggio in corso..')
 
-atto.save('new-atto.docx')
+atto.save(path.join(pathDir,'new-atto.docx'))
 
 # informo che il file è stato salvato
 print('Il file completo dei link ipertestuali è stato salvato come new-atto.docx\n Grazie per aver utilizzato il programma!')
