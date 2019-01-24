@@ -1,4 +1,10 @@
 # coding=utf-8
+# imposto l'encoding di default a utf-8
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+# importo xhtml2pdf
+from xhtml2pdf import pisa
 
 # verifica se siamo in produzione o in sviluppo
 import sys
@@ -7,7 +13,6 @@ def checkProduction():
         return False
     else:
         return True
-
 
 # funzione che riceve come parametro una stringa e rimuove l'estensione ".pdf" #
 def filterString(str):
@@ -28,6 +33,7 @@ class Link(object):
         self.name = name
         self.url = './' + url
         self.occurrence = 'doc. ' + str(index)
+        self.href = "<a href='" + url + "'>" + '<b>doc. ' + str(index) + '</b>' + "</a>"
     def __eq__(self, cmp):
         if self.occurrence == cmp:
             return self.url
@@ -40,3 +46,14 @@ def createLinkArray(docsArray):
         linkArray.append(Link(doc.txt, doc.url, index))
     return linkArray
 
+def convert_to_pdf(htmlSource, output):
+    # apro file di output
+    resultFile = open(output, 'w+b')
+
+    #converto in pdf
+    res = pisa.CreatePDF(
+        htmlSource,
+        dest=output
+    )
+
+    resultFile.close()
