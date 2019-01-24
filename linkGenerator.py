@@ -54,8 +54,12 @@ indice.add_heading('Indice atti e documenti')
 for link in linksArray:
     p = indice.add_paragraph()
     p.style = 'List Number 2'
-    new_run = p.add_run(link.name)
-    hyperlink.add(p, new_run, link.url)
+    try:
+            new_run = p.add_run(link.name)
+            hyperlink.add(p, new_run, link.url)
+    except ValueError:
+            print('Error: '+ link.name)
+    
 
 indice.save('00_indice_atti_documenti.docx')
 
